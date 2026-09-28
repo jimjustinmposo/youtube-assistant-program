@@ -1,0 +1,97 @@
+# .clinerules
+# Purpose: Guide Cline to write professional, well-structured code while
+# minimizing token usage — without cutting corners on quality.
+
+## 1. Core Operating Principles
+- Think before acting. Plan the smallest correct change that fully solves the
+  task. Do not explore, read, or rewrite files that aren't relevant.
+- Prefer editing existing files over creating new ones unless a new file is
+  clearly warranted (new module, new component, new test suite).
+- Never regenerate a whole file to make a small change. Use targeted diffs /
+  patches (replace_in_file-style edits) instead of write_to_file rewrites.
+- Batch related changes into one pass instead of many small back-and-forth
+  edits. Read a file once, make all needed edits in that session.
+- Ask a clarifying question only when a wrong guess would cause real rework;
+  otherwise pick the most reasonable interpretation and state the assumption
+  in one line.
+
+## 2. Token-Saving Rules (without sacrificing quality)
+- Do not print full file contents in responses after writing/editing them —
+  summarize what changed in 1–3 lines instead.
+- Do not restate the user's request back to them before doing the work.
+- Skip preambles ("Sure, I'll now...", "Let's get started...").
+- When reading files, request only the line ranges needed, not entire large
+  files, unless full context is required for correctness.
+- When searching the codebase, use targeted greps/searches instead of
+  listing entire directory trees unless structure discovery is the goal.
+- Avoid duplicating information that already exists in code comments, README
+  files, or prior messages — reference it instead of repeating it.
+- Keep explanations proportional to complexity: one-line summary for trivial
+  changes, short bullet list for moderate changes, fuller explanation only
+  for architectural or breaking changes.
+- Never apologize repeatedly or narrate uncertainty at length — state the
+  fix and move on.
+
+## 3. Code Structure & Professionalism
+- Follow the existing project's conventions (naming, folder layout, linting
+  rules, framework idioms) before introducing new patterns.
+- One responsibility per function/module. If a function exceeds ~40–50
+  lines or does more than one clear thing, split it.
+- Use clear, descriptive names over comments where possible; comment only
+  what the code cannot say for itself (why, not what).
+- Keep a consistent project layout, e.g.:
+  ```
+  src/
+    controllers/   # request handling
+    services/      # business logic
+    models/        # data models / schema
+    routes/        # route definitions
+    utils/         # shared helpers
+    config/        # environment & app config
+  tests/
+  ```
+- Centralize configuration (env vars, constants) — never hardcode secrets,
+  URLs, or magic numbers inline.
+- Handle errors explicitly; no silent catches. Log with enough context to
+  debug, but do not log secrets or sensitive data.
+- Validate inputs at boundaries (API routes, form submissions, external
+  calls) — not deep inside business logic.
+
+## 4. Testing & Verification
+- Any new logic that can break silently gets at least one test (unit or
+  integration) — but do not write exhaustive test suites for trivial
+  getters/setters or pure pass-through code.
+- Before declaring a task done, verify the change compiles/runs (or state
+  clearly that it hasn't been run, if execution isn't possible).
+- Do not claim a fix works without evidence (a test run, a build pass, or a
+  logical walkthrough) — state confidence level honestly.
+
+## 5. Version Control Hygiene
+- Make commits atomic: one logical change per commit.
+- Write commit messages in imperative mood, e.g. "Add rate limiter to auth
+  route", not "Added" or "Adding".
+- Do not commit generated files, secrets, `.env`, or `node_modules`/
+  `venv` equivalents — confirm `.gitignore` covers them.
+
+## 6. Dependency & Tooling Discipline
+- Do not add a new dependency for something 10–20 lines of code can do,
+  unless the dependency is already the project's established standard for
+  that concern.
+- Prefer the language/framework's built-in tooling over custom
+  reimplementations of solved problems (auth, validation, routing, etc.).
+- Pin dependency versions consistently with how the project already does it
+  (lockfile, exact version, semver range).
+
+## 7. When Uncertain
+- If a requirement is ambiguous but low-risk, proceed with the most common,
+  idiomatic solution and note the assumption in one short line.
+- If a requirement is ambiguous and high-risk (data loss, breaking change,
+  security-sensitive), ask one focused question before proceeding.
+- Never silently skip part of a request — if something can't be done, say
+  so briefly and explain why.
+
+## 8. Response Format Defaults
+- Default to concise, structured responses: short summary → key changes as
+  bullets → next steps (only if relevant).
+- Use code blocks only for actual code/diffs, not for prose.
+- Do not repeat instructions already given in this file back to the user.
